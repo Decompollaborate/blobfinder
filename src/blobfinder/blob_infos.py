@@ -14,6 +14,18 @@ class BlobInfo:
     sectionType: str
     hashStr: str
     initialHashStr: str
+    symbols: str|None = None
+
+    def sectionToSplat(self) -> str:
+        if self.sectionType == ".text":
+            return "textbin"
+        if self.sectionType == ".data":
+            return "databin"
+        if self.sectionType == ".rodata":
+            return "rodatabin"
+        if self.sectionType.startswith("."):
+            return self.sectionType[1:]
+        return self.sectionType
 
 
 # Key is the hash of the first 0x20 bytes of the blob
@@ -27,13 +39,13 @@ blobList: list[BlobInfo] = [
     BlobInfo("ipl3_X106",                   0xFC0,      ".data",    "6460387749ac0bd925aa5430bc7864fe", "24655e01b32541c685f3b86606bf456b"),
 
     # RSP ucodes
-    BlobInfo("rspboot",                     0xD0,       ".text",    "9414dd746eddee59ce6bf97eca16853e", "3fcedf9860921eb8c4f8a3be67de308d"),
-    BlobInfo("aspMain",                     0xE20,      ".text",    "ee3aec6ffbe9880deb32e8f00bc47cf1", "b8376970c6e6edb55c71a351750384b5"),
-    BlobInfo("aspMain",                     0x2C0,      ".data",    "78147a7b28db17f7e6fbf53c38bf2082", "aacf4a320e9a29eddf5bd82be64e0e88"),
-    BlobInfo("f3dex2",                      0x1390,     ".text",    "6ccf5fc392e440fb23bc7d7f7d71047c", "09bb03ca1eff937be2cf04c78c5ccd4a"),
-    BlobInfo("f3dex2",                      0x420,      ".data",    "3a3a406acb4295d33fa6e918dd3a7ae4", "70bc8f4b72a86921468bf8e8441dce51"),
-    BlobInfo("s2dex",                       0x17F0,     ".text",    "e45f2fc60e5a542d3609bf0f1ae3ed6c", "bda84c8593e8a296ae0cdcc582218bfa"),
-    BlobInfo("s2dex",                       0x3C0,      ".data",    "382e3a4f39410248b142d98bbe0a54a5", "70bc8f4b72a86921468bf8e8441dce51"),
+    BlobInfo("rspboot",                     0xD0,       ".text",    "9414dd746eddee59ce6bf97eca16853e", "3fcedf9860921eb8c4f8a3be67de308d", "rspbootTextStart/rspbootTextEnd"),
+    BlobInfo("aspMain",                     0xE20,      ".text",    "ee3aec6ffbe9880deb32e8f00bc47cf1", "b8376970c6e6edb55c71a351750384b5", "aspMainTextStart/aspMainTextEnd"),
+    BlobInfo("aspMain",                     0x2C0,      ".data",    "78147a7b28db17f7e6fbf53c38bf2082", "aacf4a320e9a29eddf5bd82be64e0e88", "aspMainDataStart/aspMainDataEnd"),
+    BlobInfo("f3dex2",                      0x1390,     ".text",    "6ccf5fc392e440fb23bc7d7f7d71047c", "09bb03ca1eff937be2cf04c78c5ccd4a", "gspF3DEX2_fifoTextStart/gspF3DEX2_fifoTextEnd"),
+    BlobInfo("f3dex2",                      0x420,      ".data",    "3a3a406acb4295d33fa6e918dd3a7ae4", "70bc8f4b72a86921468bf8e8441dce51", "gspF3DEX2_fifoDataStart/gspF3DEX2_fifoDataEnd"),
+    BlobInfo("s2dex",                       0x17F0,     ".text",    "e45f2fc60e5a542d3609bf0f1ae3ed6c", "bda84c8593e8a296ae0cdcc582218bfa", "gspS2DEX_fifoTextStart/gspS2DEX_fifoTextEnd"),
+    BlobInfo("s2dex",                       0x3C0,      ".data",    "382e3a4f39410248b142d98bbe0a54a5", "70bc8f4b72a86921468bf8e8441dce51", "gspS2DEX_fifoDataStart/gspS2DEX_fifoDataEnd"),
 
 ]
 
