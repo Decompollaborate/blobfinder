@@ -20,5 +20,5 @@ def finder(binaryBytes: bytes):
                 fullHash = utils.getHashMd5(binaryBytes[i:i+info.byteSize])
                 if info.hashStr == fullHash:
                     # found.append(info)
-                    print(f"Found: {info.name} at offset 0x{i:X}. Ends at offset 0x{i+info.byteSize:X}")
+                    print(f"Found: {info.name} ({info.sectionType}) at offset 0x{i:X}. Ends at offset 0x{i+info.byteSize:X}")
                     break
