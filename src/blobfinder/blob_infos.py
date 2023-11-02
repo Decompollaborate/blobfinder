@@ -13,8 +13,9 @@ class BlobInfo:
     byteSize: int
     sectionType: str
     hashStr: str
-    initialHashStr: str
+    initialHashStr: str # hash of the first 0x20 bytes
     symbols: str|None = None
+    variant: str|None = None
 
     def sectionToSplat(self) -> str:
         if self.sectionType == ".text":
@@ -28,7 +29,6 @@ class BlobInfo:
         return self.sectionType
 
 
-# Key is the hash of the first 0x20 bytes of the blob
 blobList: list[BlobInfo] = [
     # IPL3s
     BlobInfo("ipl3_6101",                       0xFC0,      ".data",    "900b4a5b68edb71f4c7ed52acd814fc5", "f226632d4b423607842a2cf5d78553fd"),
@@ -39,9 +39,13 @@ blobList: list[BlobInfo] = [
     BlobInfo("ipl3_X106",                       0xFC0,      ".data",    "6460387749ac0bd925aa5430bc7864fe", "24655e01b32541c685f3b86606bf456b"),
 
     # libultra RSP ucodes
-    BlobInfo("rspboot",                         0xD0,       ".text",    "9414dd746eddee59ce6bf97eca16853e", "3fcedf9860921eb8c4f8a3be67de308d", "rspbootTextStart/rspbootTextEnd"),
-    BlobInfo("aspMain",                         0xE20,      ".text",    "ee3aec6ffbe9880deb32e8f00bc47cf1", "b8376970c6e6edb55c71a351750384b5", "aspMainTextStart/aspMainTextEnd"),
-    BlobInfo("aspMain",                         0x2C0,      ".data",    "78147a7b28db17f7e6fbf53c38bf2082", "aacf4a320e9a29eddf5bd82be64e0e88", "aspMainDataStart/aspMainDataEnd"),
+    BlobInfo("rspboot",                         0xD0,       ".text",    "9414dd746eddee59ce6bf97eca16853e", "3fcedf9860921eb8c4f8a3be67de308d", "rspbootTextStart/rspbootTextEnd", variant=None),
+    BlobInfo("rspboot",                         0x160,      ".text",    "71a783d5a6bd3eb289cad5ecd1c3f71d", "8375a7f115d082ffcb2b7fd69b7873e6", "rspbootTextStart/rspbootTextEnd", variant="zelda64"),
+
+    BlobInfo("aspMain",                         0xE20,      ".text",    "ee3aec6ffbe9880deb32e8f00bc47cf1", "b8376970c6e6edb55c71a351750384b5", "aspMainTextStart/aspMainTextEnd", variant=None),
+    BlobInfo("aspMain",                         0x2C0,      ".data",    "78147a7b28db17f7e6fbf53c38bf2082", "aacf4a320e9a29eddf5bd82be64e0e88", "aspMainDataStart/aspMainDataEnd", variant=None),
+
+    # TODO: identify variants
     BlobInfo("s2dex",                           0x17F0,     ".text",    "e45f2fc60e5a542d3609bf0f1ae3ed6c", "bda84c8593e8a296ae0cdcc582218bfa", "gspS2DEX_fifoTextStart/gspS2DEX_fifoTextEnd"),
     BlobInfo("s2dex",                           0x3C0,      ".data",    "382e3a4f39410248b142d98bbe0a54a5", "70bc8f4b72a86921468bf8e8441dce51", "gspS2DEX_fifoDataStart/gspS2DEX_fifoDataEnd"),
     BlobInfo("f3dex",                           0x1430,     ".text",    "6b329f3fdf0fb041e27acd3b285365c8", "821377b6549d6678b4ff4788261206b4", "gspF3DEX_fifoTextStart/gspF3DEX_fifoTextEnd"),
@@ -55,18 +59,14 @@ blobList: list[BlobInfo] = [
     BlobInfo("njpgdspMain",                     0xAF0,      ".text",    "1cab4dc7403c218956adc82dffc624c0", "5dbbfd793057ddf9ae019deb79892a2b", "njpgdspMainTextStart/njpgdspMainTextEnd"),
     BlobInfo("njpgdspMain",                     0x60,       ".data",    "cf5303b2528507dad6da93df2a52a01f", "a02bb989958a678f5cb61bd8ac2b06d4", "njpgdspMainDataStart/njpgdspMainDataEnd"),
 
-    BlobInfo("rspboot (MM)",                    0x160,      ".text",    "71a783d5a6bd3eb289cad5ecd1c3f71d", "8375a7f115d082ffcb2b7fd69b7873e6", "rspbootTextStart/rspbootTextEnd"),
-
     # HVQM2
-    BlobInfo("hvqm2sp1",                        0x5D0,      ".text",   "1fb32836fe499c4ef6ab5ca6fc0fed52", "a1e49982be78f96fab5d7615fb1fe734", "hvqm2sp1DataStart/hvqm2sp1DataEnd"),
-    BlobInfo("hvqm2sp1",                        0xD50,      ".data",   "e2f6443aa7d009d9b35ff48f934a2151", "f653e178ed1acfe1cf2564141a64b3ae", "hvqm2sp1DataStart/hvqm2sp1DataEnd"),
+    BlobInfo("hvqm2sp1",                        0x5D0,      ".text",    "1fb32836fe499c4ef6ab5ca6fc0fed52", "a1e49982be78f96fab5d7615fb1fe734", "hvqm2sp1DataStart/hvqm2sp1DataEnd"),
+    BlobInfo("hvqm2sp1",                        0xD50,      ".data",    "e2f6443aa7d009d9b35ff48f934a2151", "f653e178ed1acfe1cf2564141a64b3ae", "hvqm2sp1DataStart/hvqm2sp1DataEnd"),
     # TODO: hvqm2sp2
     # BlobInfo("hvqm2sp2",                     ,       ".text",    "", "", ""),
     # BlobInfo("hvqm2sp2",                     ,       ".data",    "", "", ""),
 
 ]
-
-
 
 initialHashesDict: dict[str, list[BlobInfo]] = dict()
 for x in blobList:
